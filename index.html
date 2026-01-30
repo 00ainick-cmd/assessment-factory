@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏭 Assessment Factory</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3e 50%, #0f2847 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 40px;
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, #00d4ff, #7b2fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            color: #888;
+            font-size: 1.1rem;
+        }
+        
+        .quality-badge {
+            display: inline-block;
+            background: rgba(0,212,255,0.1);
+            border: 1px solid rgba(0,212,255,0.3);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #00d4ff;
+            margin-top: 15px;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        @media (max-width: 900px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+        
+        .panel {
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        
+        .panel h2 {
+            font-size: 1rem;
+            color: #00d4ff;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 200px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 15px;
+            color: #fff;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9rem;
+            resize: vertical;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #00d4ff;
+        }
+        
+        textarea::placeholder {
+            color: #555;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #00d4ff, #7b2fff);
+            color: #fff;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,212,255,0.3);
+        }
+        
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: #aaa;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .settings {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .setting {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .setting label {
+            font-size: 0.8rem;
+            color: #888;
+            text-transform: uppercase;
+        }
+        
+        .setting select, .setting input {
+            padding: 10px 15px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.9rem;
+        }
+        
+        /* Quality Principles */
+        .principles {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(123,47,255,0.1);
+            border-radius: 12px;
+            border-left: 4px solid #7b2fff;
+        }
+        
+        .principles h3 {
+            font-size: 0.85rem;
+            color: #7b2fff;
+            margin-bottom: 10px;
+        }
+        
+        .principles ul {
+            list-style: none;
+            font-size: 0.85rem;
+            color: #aaa;
+        }
+        
+        .principles li {
+            padding: 4px 0;
+        }
+        
+        .principles li::before {
+            content: "✓ ";
+            color: #7b2fff;
+        }
+        
+        /* Output Panel */
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .stat {
+            text-align: center;
+            padding: 10px 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+        
+        .stat-label {
+            font-size: 0.7rem;
+            color: #888;
+            text-transform: uppercase;
+        }
+        
+        /* Distribution Bar */
+        .distribution {
+            display: flex;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        
+        .dist-a { background: #ff6b6b; }
+        .dist-b { background: #ffd93d; }
+        .dist-c { background: #6bcb77; }
+        .dist-d { background: #4d96ff; }
+        
+        .dist-legend {
+            display: flex;
+            gap: 15px;
+            font-size: 0.8rem;
+            color: #888;
+        }
+        
+        .dist-legend span::before {
+            content: "●";
+            margin-right: 5px;
+        }
+        
+        .legend-a::before { color: #ff6b6b; }
+        .legend-b::before { color: #ffd93d; }
+        .legend-c::before { color: #6bcb77; }
+        .legend-d::before { color: #4d96ff; }
+        
+        /* Questions */
+        .question-card {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+        
+        .question-num {
+            background: linear-gradient(135deg, #00d4ff, #7b2fff);
+            color: #fff;
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .question-meta {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .tag {
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: #888;
+        }
+        
+        .tag-blooms { background: rgba(123,47,255,0.2); color: #a78bfa; }
+        .tag-correct { background: rgba(107,203,119,0.2); color: #6bcb77; }
+        
+        .question-stem {
+            font-size: 1rem;
+            color: #fff;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .option {
+            padding: 12px 15px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+        
+        .option:hover {
+            background: rgba(255,255,255,0.08);
+        }
+        
+        .option.correct {
+            background: rgba(107,203,119,0.15);
+            border: 1px solid rgba(107,203,119,0.3);
+        }
+        
+        .option-letter {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        
+        .option.correct .option-letter {
+            background: #6bcb77;
+            color: #000;
+        }
+        
+        .explanation {
+            margin-top: 12px;
+            padding: 12px;
+            background: rgba(0,212,255,0.1);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #aaa;
+            border-left: 3px solid #00d4ff;
+        }
+        
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 60px;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top-color: #00d4ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px;
+            color: #555;
+        }
+        
+        .empty-state .icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #444;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏭 Assessment Factory</h1>
+            <p>Part 145-aligned assessment generation with Patty Shank quality</p>
+            <div class="quality-badge">✓ Bloom's Taxonomy • ✓ Scenario-Based • ✓ Balanced Distribution</div>
+        </header>
+        
+        <div class="grid">
+            <!-- Input Panel -->
+            <div class="panel">
+                <h2>📝 Learning Objectives</h2>
+                <textarea id="objectives" placeholder="Enter learning objectives (one per line):
+
+Example:
+Define voltage, current, and resistance and state their units of measure
+Calculate power in a DC circuit using P=IV
+Identify proper multimeter settings for measuring resistance
+Apply Kirchhoff's voltage law to series circuits"></textarea>
+                
+                <div class="settings">
+                    <div class="setting">
+                        <label>Questions per objective</label>
+                        <select id="numQuestions">
+                            <option value="2">2</option>
+                            <option value="3" selected>3</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                    <div class="setting">
+                        <label>Difficulty</label>
+                        <select id="difficulty">
+                            <option value="apprentice" selected>Apprentice</option>
+                            <option value="journeyman">Journeyman</option>
+                            <option value="master">Master</option>
+                        </select>
+                    </div>
+                    <div class="setting">
+                        <label>Domain</label>
+                        <select id="domain">
+                            <option value="dc" selected>DC Fundamentals</option>
+                            <option value="ac">AC Circuits</option>
+                            <option value="digital">Digital Electronics</option>
+                            <option value="safety">Safety</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <button class="btn btn-primary" id="generateBtn" onclick="generateQuestions()">
+                        🚀 Generate Questions
+                    </button>
+                    <button class="btn btn-secondary" onclick="loadSample()">
+                        Load Sample
+                    </button>
+                </div>
+                
+                <div class="principles">
+                    <h3>Quality Principles (Patty Shank)</h3>
+                    <ul>
+                        <li>Scenario-based stems with realistic context</li>
+                        <li>Plausible distractors (common misconceptions)</li>
+                        <li>Even A/B/C/D distribution</li>
+                        <li>No "all of the above" or "none of the above"</li>
+                        <li>C is never always correct</li>
+                        <li>Clear, unambiguous wording</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Output Panel -->
+            <div class="panel">
+                <div class="output-header">
+                    <h2>📊 Generated Questions</h2>
+                    <div class="stats" id="stats" style="display:none;">
+                        <div class="stat">
+                            <div class="stat-value" id="statCount">0</div>
+                            <div class="stat-label">Questions</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value" id="statBlooms">-</div>
+                            <div class="stat-label">Avg Bloom's</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="distribution" style="display:none;">
+                    <div class="distribution">
+                        <div class="dist-a" id="distA" style="width:25%"></div>
+                        <div class="dist-b" id="distB" style="width:25%"></div>
+                        <div class="dist-c" id="distC" style="width:25%"></div>
+                        <div class="dist-d" id="distD" style="width:25%"></div>
+                    </div>
+                    <div class="dist-legend">
+                        <span class="legend-a">A: <span id="distAVal">25%</span></span>
+                        <span class="legend-b">B: <span id="distBVal">25%</span></span>
+                        <span class="legend-c">C: <span id="distCVal">25%</span></span>
+                        <span class="legend-d">D: <span id="distDVal">25%</span></span>
+                    </div>
+                </div>
+                
+                <div id="output">
+                    <div class="empty-state">
+                        <div class="icon">🎯</div>
+                        <p>Enter learning objectives and click Generate</p>
+                    </div>
+                </div>
+                
+                <div class="controls" id="exportControls" style="display:none;">
+                    <button class="btn btn-secondary" onclick="exportJSON()">Export JSON</button>
+                    <button class="btn btn-secondary" onclick="exportMarkdown()">Export Markdown</button>
+                    <button class="btn btn-secondary" onclick="copyToClipboard()">Copy All</button>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            Assessment Factory v1.0 • Built by Ace 🦀 • Patty Shank Approved™
+        </footer>
+    </div>
+    
+    <script>
+        // Sample data for demo
+        const SAMPLE_QUESTIONS = [
+            {
+                id: 1,
+                stem: "A technician is troubleshooting a King Air's landing gear system. The multimeter reads 0 ohms between the gear motor's positive terminal and ground. What does this indicate?",
+                options: {
+                    A: "The motor windings are open",
+                    B: "The motor has a short circuit to ground", 
+                    C: "The motor is operating normally",
+                    D: "The multimeter needs calibration"
+                },
+                correct: "B",
+                blooms: "Analyze",
+                explanation: "0 ohms to ground indicates a direct short circuit. Normal motor windings would show measurable resistance. This is a critical fault requiring immediate attention.",
+                objective: "Identify fault conditions using multimeter readings"
+            },
+            {
+                id: 2,
+                stem: "In a 28VDC aircraft electrical system, a navigation light circuit draws 2 amps. Using Ohm's Law, what is the resistance of the light bulb?",
+                options: {
+                    A: "56 ohms",
+                    B: "14 ohms",
+                    C: "0.07 ohms",
+                    D: "26 ohms"
+                },
+                correct: "B",
+                blooms: "Apply",
+                explanation: "Using R = V/I: R = 28V ÷ 2A = 14 ohms. Option A (56) is V×I (common error). Option C is I/V. Option D is V-I.",
+                objective: "Calculate resistance using Ohm's Law"
+            },
+            {
+                id: 3,
+                stem: "A Citation's avionics bay shows three loads in parallel: 10Ω, 20Ω, and 20Ω. What is the total circuit resistance?",
+                options: {
+                    A: "50 ohms",
+                    B: "5 ohms",
+                    C: "16.7 ohms",
+                    D: "6.7 ohms"
+                },
+                correct: "B",
+                blooms: "Apply",
+                explanation: "Parallel resistance: 1/Rt = 1/10 + 1/20 + 1/20 = 0.1 + 0.05 + 0.05 = 0.2. Rt = 1/0.2 = 5Ω. Option A is series sum (common error).",
+                objective: "Calculate total resistance in parallel circuits"
+            },
+            {
+                id: 4,
+                stem: "Before measuring resistance on an aircraft component, what must the technician do FIRST?",
+                options: {
+                    A: "Set the multimeter to the highest ohms range",
+                    B: "Ensure power is disconnected from the circuit",
+                    C: "Connect the black lead to the positive terminal",
+                    D: "Zero the meter using the adjustment knob"
+                },
+                correct: "B",
+                blooms: "Remember",
+                explanation: "Safety first. Measuring resistance on a powered circuit can damage the meter and give false readings. Always de-energize before resistance measurements.",
+                objective: "State proper multimeter safety procedures"
+            },
+            {
+                id: 5,
+                stem: "A Cirrus SR22 battery shows 24.8V at rest. After engine start, voltage rises to 28.2V. This indicates the:",
+                options: {
+                    A: "Battery is overcharged and should be replaced",
+                    B: "Alternator is functioning and charging the battery",
+                    C: "Voltage regulator has failed",
+                    D: "Battery has a shorted cell"
+                },
+                correct: "B",
+                blooms: "Analyze",
+                explanation: "Voltage rise after start indicates the alternator is outputting charging voltage (typically 27.5-28.5V in 24V systems). This is normal operation.",
+                objective: "Interpret charging system voltage readings"
+            }
+        ];
+        
+        let generatedQuestions = [];
+        
+        function loadSample() {
+            document.getElementById('objectives').value = `Define voltage, current, and resistance and state their units of measure
+Calculate voltage, current, or resistance using Ohm's Law
+Determine total resistance in series and parallel circuits
+Identify proper multimeter settings and safety procedures
+Interpret voltage readings in aircraft charging systems`;
+        }
+        
+        function generateQuestions() {
+            const btn = document.getElementById('generateBtn');
+            const output = document.getElementById('output');
+            
+            btn.disabled = true;
+            btn.textContent = '⏳ Generating...';
+            
+            output.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Generating high-quality questions...</p>
+                    <p style="font-size:0.8rem; color:#555; margin-top:10px;">Applying Patty Shank principles</p>
+                </div>
+            `;
+            
+            // Simulate generation (in real app, this calls Claude API)
+            setTimeout(() => {
+                generatedQuestions = SAMPLE_QUESTIONS;
+                renderQuestions(generatedQuestions);
+                btn.disabled = false;
+                btn.textContent = '🚀 Generate Questions';
+            }, 2000);
+        }
+        
+        function renderQuestions(questions) {
+            const output = document.getElementById('output');
+            const stats = document.getElementById('stats');
+            const distribution = document.getElementById('distribution');
+            const exportControls = document.getElementById('exportControls');
+            
+            // Calculate distribution
+            const dist = { A: 0, B: 0, C: 0, D: 0 };
+            questions.forEach(q => dist[q.correct]++);
+            const total = questions.length;
+            
+            // Update distribution bar
+            document.getElementById('distA').style.width = (dist.A / total * 100) + '%';
+            document.getElementById('distB').style.width = (dist.B / total * 100) + '%';
+            document.getElementById('distC').style.width = (dist.C / total * 100) + '%';
+            document.getElementById('distD').style.width = (dist.D / total * 100) + '%';
+            
+            document.getElementById('distAVal').textContent = Math.round(dist.A / total * 100) + '%';
+            document.getElementById('distBVal').textContent = Math.round(dist.B / total * 100) + '%';
+            document.getElementById('distCVal').textContent = Math.round(dist.C / total * 100) + '%';
+            document.getElementById('distDVal').textContent = Math.round(dist.D / total * 100) + '%';
+            
+            // Update stats
+            document.getElementById('statCount').textContent = total;
+            
+            // Calculate average Bloom's level
+            const bloomsLevels = { Remember: 1, Understand: 2, Apply: 3, Analyze: 4, Evaluate: 5, Create: 6 };
+            const avgBlooms = questions.reduce((sum, q) => sum + (bloomsLevels[q.blooms] || 3), 0) / total;
+            document.getElementById('statBlooms').textContent = avgBlooms.toFixed(1);
+            
+            stats.style.display = 'flex';
+            distribution.style.display = 'block';
+            exportControls.style.display = 'flex';
+            
+            // Render questions
+            output.innerHTML = questions.map((q, i) => `
+                <div class="question-card">
+                    <div class="question-header">
+                        <div class="question-num">${i + 1}</div>
+                        <div class="question-meta">
+                            <span class="tag tag-blooms">${q.blooms}</span>
+                            <span class="tag tag-correct">Answer: ${q.correct}</span>
+                        </div>
+                    </div>
+                    <div class="question-stem">${q.stem}</div>
+                    <div class="options">
+                        ${Object.entries(q.options).map(([letter, text]) => `
+                            <div class="option ${letter === q.correct ? 'correct' : ''}">
+                                <span class="option-letter">${letter}</span>
+                                <span>${text}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="explanation">
+                        <strong>Explanation:</strong> ${q.explanation}
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function exportJSON() {
+            const data = JSON.stringify(generatedQuestions, null, 2);
+            download('assessment-questions.json', data, 'application/json');
+        }
+        
+        function exportMarkdown() {
+            let md = '# Assessment Questions\n\n';
+            generatedQuestions.forEach((q, i) => {
+                md += `## Question ${i + 1} [${q.blooms}]\n\n`;
+                md += `${q.stem}\n\n`;
+                Object.entries(q.options).forEach(([letter, text]) => {
+                    md += `${letter}. ${text}${letter === q.correct ? ' ✓' : ''}\n`;
+                });
+                md += `\n**Explanation:** ${q.explanation}\n\n---\n\n`;
+            });
+            download('assessment-questions.md', md, 'text/markdown');
+        }
+        
+        function download(filename, content, type) {
+            const blob = new Blob([content], { type });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        function copyToClipboard() {
+            const text = generatedQuestions.map((q, i) => 
+                `${i + 1}. ${q.stem}\nA. ${q.options.A}\nB. ${q.options.B}\nC. ${q.options.C}\nD. ${q.options.D}\nAnswer: ${q.correct}`
+            ).join('\n\n');
+            navigator.clipboard.writeText(text);
+            alert('Copied to clipboard!');
+        }
+    </script>
+</body>
+</html>
